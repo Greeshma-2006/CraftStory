@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const API_BASE_URL =
   import.meta.env.VITE_BACKEND_URL ||
-  'https://craftstory.onrender.com';
+  'http://localhost:5173,https://craftstory.onrender.com';
 
 const api = axios.create({
 
