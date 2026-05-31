@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 39 23 10 0;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 1rem;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-cream font-body text-neutral-800;
+    background-color: #FDFBF7;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading;
+  }
+}
+
+.paper-texture {
+  background-image: url('https://static.prod-images.emergentagent.com/jobs/59bc0f4e-21cb-4028-8c28-3975d2677acd/images/795bddcb462243b551a6db82b6767f7f82e115237933c19f331bc9a74f9c0d4e.png');
+  background-repeat: repeat;
+  background-size: 400px;
+  opacity: 0.05;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.btn-primary {
+  @apply bg-terracotta text-white rounded-full px-8 py-3 font-medium transition-colors duration-300 hover:bg-terracotta-hover;
+}
+
+.btn-secondary {
+  @apply bg-neutral-100 text-neutral-900 rounded-full px-8 py-3 font-medium transition-colors duration-300 hover:bg-neutral-200;
+}
+
+.btn-outline {
+  @apply border border-neutral-200 text-neutral-900 rounded-full px-8 py-3 font-medium transition-all duration-300 hover:border-terracotta hover:text-terracotta;
+}
+
+.card-craft {
+  @apply bg-white rounded-3xl border border-neutral-200 shadow-card transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1;
+}
+
+.input-craft {
+  @apply rounded-xl bg-white border border-neutral-200 px-4 py-3 focus:border-terracotta focus:ring-1 focus:ring-terracotta outline-none transition-colors;
+}
+
+.badge-craft {
+  @apply bg-neutral-100 text-clay text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Product image hover effect */
+.product-image-wrapper {
+  @apply overflow-hidden rounded-2xl;
+}
+
+.product-image {
+  @apply transition-transform duration-500 ease-out;
+}
+
+.product-image-wrapper:hover .product-image {
+  @apply scale-105;
+}
+
+/* Loading animation */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.loading-shimmer {
+  animation: shimmer 2s infinite;
+  background: linear-gradient(to right, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
+  background-size: 1000px 100%;
+}

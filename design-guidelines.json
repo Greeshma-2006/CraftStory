@@ -1,0 +1,130 @@
+{
+  "theme_and_archetype": {
+    "domain": "Artisan Marketplace / E-commerce",
+    "theme": "LIGHT",
+    "archetype": "1 (Organic & Earthy)",
+    "rationale": "Customers seeking handcrafted goods need an environment that feels tactile, warm, and authentic. Terracotta and earthy tones evoke physical craftsmanship, rural heritage, and trust."
+  },
+
+  "colors": {
+    "background": {
+      "main": "#FDFBF7",
+      "alt": "#F5F2EB",
+      "texture_overlay": "Use the provided paper_texture image with opacity-20 or mix-blend-multiply for a tactile feel."
+    },
+
+    "primary": {
+      "main": "#BD5745",
+      "hover": "#A64A3A",
+      "text_on_primary": "#FFFFFF"
+    },
+
+    "secondary": {
+      "main": "#8B6B56",
+      "hover": "#785B49"
+    },
+
+    "neutral": {
+      "900": "#2C2420",
+      "800": "#4A3F39",
+      "500": "#8C827A",
+      "200": "#E8E3DD",
+      "100": "#F5F2EB"
+    },
+
+    "surface": {
+      "card": "#FFFFFF",
+      "input": "#FFFFFF"
+    },
+
+    "border": {
+      "subtle": "#E8E3DD",
+      "focus": "#BD5745"
+    }
+  },
+
+  "typography": {
+    "headings": {
+      "font_family": "Cormorant Garamond, serif",
+      "weights": ["400", "500", "600"],
+      "usage": "Use for all H1, H2, H3. Elegant storytelling typography."
+    },
+
+    "body": {
+      "font_family": "DM Sans, sans-serif",
+      "weights": ["400", "500"],
+      "usage": "Readable modern sans-serif for forms and paragraphs."
+    },
+
+    "scales": {
+      "h1": "text-4xl sm:text-5xl lg:text-6xl tracking-tight leading-none",
+      "h2": "text-3xl sm:text-4xl tracking-tight",
+      "h3": "text-2xl",
+      "body_large": "text-lg text-neutral-800 leading-relaxed",
+      "body": "text-base text-neutral-600 leading-relaxed",
+      "caption": "text-sm text-neutral-500 uppercase tracking-widest"
+    }
+  },
+
+  "layout_and_spacing": {
+    "container": "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
+    "spacing_philosophy": "Use generous spacing for elegant layouts.",
+    "grid_system": "Bento-style layouts for storytelling sections."
+  },
+
+  "surfaces_and_components": {
+    "cards": {
+      "style": "Soft organic cards with rounded corners.",
+      "border": "1px solid #E8E3DD",
+      "shadow": "shadow-[0_8px_30px_rgb(74,63,57,0.04)]",
+      "hover": "hover:shadow-[0_12px_40px_rgb(74,63,57,0.08)] transition-all duration-300 -translate-y-1"
+    },
+
+    "buttons": {
+      "primary": "bg-[#BD5745] text-white rounded-full px-8 py-3 hover:bg-[#A64A3A] transition-colors font-medium",
+
+      "secondary": "bg-[#F5F2EB] text-[#2C2420] rounded-full px-8 py-3 hover:bg-[#E8E3DD] transition-colors font-medium",
+
+      "outline": "border border-[#E8E3DD] text-[#2C2420] rounded-full px-8 py-3 hover:border-[#BD5745] hover:text-[#BD5745] transition-colors font-medium"
+    },
+
+    "inputs": {
+      "style": "Rounded-xl bg-white border border-[#E8E3DD] focus:border-[#BD5745] focus:ring-1 focus:ring-[#BD5745] px-4 py-3"
+    },
+
+    "badges": {
+      "style": "bg-[#F5F2EB] text-[#8B6B56] text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full"
+    }
+  },
+
+  "motion_and_interactions": {
+    "hover_states": "Cards slightly scale on hover.",
+    "page_transitions": "Fade and slide-up animations.",
+    "microinteractions": "Wishlist heart pop animation."
+  },
+
+  "media": {
+    "icons": {
+      "library": "lucide-react",
+      "stroke_width": "1.5",
+      "style": "Elegant outline icons."
+    }
+  },
+
+  "pages": {
+    "Landing Page": "Hero section with artisan storytelling layout.",
+    "Login/Register": "Split-screen auth layout.",
+    "Admin Dashboard": "Analytics-focused control room.",
+    "Artisan Dashboard": "Inventory and storytelling dashboard.",
+    "Customer Dashboard": "Orders, wishlist, recommendations.",
+    "Product Details Page": "Large product images with artisan story.",
+    "CraftStory Page": "Immersive storytelling experience.",
+    "Cart & Checkout": "Minimal distraction checkout flow.",
+    "Wishlist Page": "Saved products grid layout.",
+    "Profile Page": "User settings and address management."
+  },
+
+  "testing_attributes": {
+    "required": "All buttons and forms must include data-testid attributes."
+  }
+}
