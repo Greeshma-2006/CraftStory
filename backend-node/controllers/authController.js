@@ -95,44 +95,46 @@ exports.login = async (req, res, next) => {
 
       const verifyUrl = `${process.env.CLIENT_URL}/admin/verify-login/${token}`;
 
-      // Respond immediately — do NOT await the email.
-      // Awaiting sendEmail blocks the HTTP response for 3-10 seconds
-      // while the SMTP handshake completes. Fire-and-forget instead.
-      res.status(200).json({
+      // Await the email — with Brevo HTTP API this is fast (< 2s)
+      // If it fails, return a real error so admin knows email wasn't sent
+      try {
+        await sendEmail({
+          email: user.email,
+          subject: 'CraftStory Admin Login Verification',
+          html: `
+            <div style="font-family: Georgia, serif; max-width: 520px; margin: 0 auto; background: #FFF9F3; border-radius: 16px; padding: 40px; border: 1px solid #E7D5C7;">
+              <h1 style="color: #C96A4A; font-size: 28px; margin-bottom: 8px;">CraftStory</h1>
+              <h2 style="color: #6B3E2E; font-size: 22px; margin-bottom: 24px;">Admin Login Verification</h2>
+              <p style="color: #6B3E2E; line-height: 1.6;">
+                A login attempt was made for the admin account. Click the button below to verify and complete your login.
+                This link expires in <strong>15 minutes</strong>.
+              </p>
+              <div style="text-align: center; margin: 36px 0;">
+                <a href="${verifyUrl}"
+                   style="background: #C96A4A; color: white; padding: 14px 36px; border-radius: 50px; text-decoration: none; font-size: 16px; font-weight: bold; display: inline-block;">
+                  Verify Admin Login
+                </a>
+              </div>
+              <p style="color: #6B3E2E80; font-size: 13px;">
+                If you did not attempt this login, please ignore this email.
+                Your account remains secure.
+              </p>
+            </div>
+          `,
+        });
+      } catch (emailErr) {
+        console.error('Admin verification email failed:', emailErr.message);
+        return res.status(500).json({
+          success: false,
+          message: `Login failed: could not send verification email. ${emailErr.message}`,
+        });
+      }
+
+      return res.status(200).json({
         success: true,
         requiresVerification: true,
         message: 'Verification email sent to admin account',
       });
-
-      // Send email in background after response is already delivered
-      sendEmail({
-        email: user.email,
-        subject: 'CraftStory Admin Login Verification',
-        html: `
-          <div style="font-family: Georgia, serif; max-width: 520px; margin: 0 auto; background: #FFF9F3; border-radius: 16px; padding: 40px; border: 1px solid #E7D5C7;">
-            <h1 style="color: #C96A4A; font-size: 28px; margin-bottom: 8px;">CraftStory</h1>
-            <h2 style="color: #6B3E2E; font-size: 22px; margin-bottom: 24px;">Admin Login Verification</h2>
-            <p style="color: #6B3E2E; line-height: 1.6;">
-              A login attempt was made for the admin account. Click the button below to verify and complete your login.
-              This link expires in <strong>15 minutes</strong>.
-            </p>
-            <div style="text-align: center; margin: 36px 0;">
-              <a href="${verifyUrl}"
-                 style="background: #C96A4A; color: white; padding: 14px 36px; border-radius: 50px; text-decoration: none; font-size: 16px; font-weight: bold; display: inline-block;">
-                Verify Admin Login
-              </a>
-            </div>
-            <p style="color: #6B3E2E80; font-size: 13px;">
-              If you did not attempt this login, please ignore this email.
-              Your account remains secure.
-            </p>
-          </div>
-        `,
-      }).catch((err) =>
-        console.error('Admin verification email failed:', err.message)
-      );
-
-      return; // response already sent above
     }
 
     // ── ARTISAN: check approval status ───────────────────────────────────────
@@ -217,11 +219,9 @@ exports.forgotPassword = async (req, res, next) => {
 
     const resetUrl = `${process.env.CLIENT_URL}/reset-password/${resetToken}`;
 
-    // Respond immediately so user isn't waiting for SMTP handshake
-    res.status(200).json({ success: true, message: 'Password reset email sent' });
-
-    // Send email in background after response is already delivered
-    sendEmail({
+    // Await the email — with Brevo HTTP API this is fast (< 2s)
+    // If it fails, tell the user instead of silently swallowing the error
+    await sendEmail({
       email: user.email,
       subject: 'CraftStory Password Reset',
       html: `
@@ -242,9 +242,9 @@ exports.forgotPassword = async (req, res, next) => {
           </p>
         </div>
       `,
-    }).catch((err) =>
-      console.error('Password reset email failed:', err.message)
-    );
+    });
+
+    res.status(200).json({ success: true, message: 'Password reset email sent' });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
