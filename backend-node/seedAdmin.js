@@ -3,7 +3,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const User     = require('./models/User');
 
-const ADMIN_EMAIL    = '23eg112d03@anurag.edu.in';
+const ADMIN_EMAIL    = 'ggreeshma.ai@gmail.com';
 const ADMIN_PASSWORD = 'Admin@123';
 const ADMIN_NAME     = 'CraftStory Admin';
 
