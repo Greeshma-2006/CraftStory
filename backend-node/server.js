@@ -10,10 +10,8 @@ const app = express();
 
 
 // ======================
-// Database Connection
+// Database Connection — called below after routes are registered
 // ======================
-
-connectDatabase();
 
 
 // ======================
@@ -248,27 +246,24 @@ app.use(
 // Start Server
 // ======================
 
-const PORT =
-  process.env.PORT || 8001;
+const PORT = process.env.PORT || 8001;
 
-app.listen(
-  PORT,
-  async () => {
-
-    console.log(
-      `Server running on port ${PORT}`
-    );
-
-    console.log(
-      `Environment: ${
-        process.env.NODE_ENV ||
-        'development'
-      }`
-    );
-
+// Connect to DB first, THEN seed admin, THEN start listening.
+// Previously connectDatabase() was called at the top and app.listen fired
+// immediately — seedAdmin() ran before the connection was established,
+// causing it to silently fail on cold starts (Render, Railway, etc.)
+connectDatabase()
+  .then(async () => {
     await seedAdmin();
 
-  }
-);
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+      console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+    });
+  })
+  .catch((err) => {
+    console.error('Failed to start server:', err.message);
+    process.exit(1);
+  });
 
 module.exports = app;

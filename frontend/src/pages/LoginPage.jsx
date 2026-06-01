@@ -74,15 +74,20 @@ const LoginPage = () => {
           alt="CraftStory"
           className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-          <div className="text-center px-10 max-w-xl">
-            <p className="uppercase tracking-[5px] text-[#6B3E2E] mb-5 font-semibold">
+        {/* Light uniform overlay — just enough to make white text readable */}
+        <div className="absolute inset-0 bg-black/30" />
+        <div className="absolute inset-0 flex items-center justify-center px-10">
+          <div className="text-center max-w-xl">
+            <p className="uppercase tracking-[5px] text-white/90 mb-4 font-semibold text-sm"
+               style={{ textShadow: '0 1px 4px rgba(0,0,0,0.4)' }}>
               Handcrafted Heritage Platform
             </p>
-            <h1 className="text-6xl font-serif mb-6 leading-tight text-[#4A2518]">
+            <h1 className="text-5xl font-serif mb-5 leading-tight text-white"
+                style={{ textShadow: '0 2px 8px rgba(0,0,0,0.35)' }}>
               Every Craft<br />Tells a Story
             </h1>
-            <p className="text-lg leading-relaxed text-[#4A2518]/80">
+            <p className="text-base leading-relaxed text-white/85"
+               style={{ textShadow: '0 1px 4px rgba(0,0,0,0.35)' }}>
               Continue your journey through authentic artisan stories,
               handmade traditions, and meaningful cultural craftsmanship.
             </p>

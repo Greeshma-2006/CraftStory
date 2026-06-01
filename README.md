@@ -417,21 +417,6 @@ npm run dev
 
 ---
 
-### Access Application
-
-Frontend:
-
-```bash
-http://localhost:5173
-```
-
-Backend:
-
-```bash
-http://localhost:5000
-```
-
----
 
 ## Future Enhancements
 
