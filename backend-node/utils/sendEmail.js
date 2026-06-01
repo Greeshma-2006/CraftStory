@@ -9,32 +9,28 @@ const sendEmail = async ({
   try {
 
     const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+      host: process.env.SMTP_HOST,
+      port: process.env.SMTP_PORT,
+      secure: false,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    await transporter.verify();
+    console.log("SMTP Connected Successfully");
 
     await transporter.sendMail({
-
       from: `"CraftStory" <${process.env.EMAIL_USER}>`,
-
       to: email,
-
       subject,
-
       html,
     });
 
   } catch (error) {
 
-    console.error(
-      'Email Error:',
-      error
-    );
+    console.error('Email Error:', error);
 
     throw error;
   }
