@@ -267,3 +267,21 @@ connectDatabase()
   });
 
 module.exports = app;
+// ======================
+// Email Test Route (admin only — remove after confirming email works)
+// GET /api/test-email?to=your@email.com
+// ======================
+app.get('/api/test-email', async (req, res) => {
+  try {
+    const sendEmail = require('./utils/sendEmail');
+    const to = req.query.to || process.env.EMAIL_USER;
+    await sendEmail({
+      email:   to,
+      subject: 'CraftStory Email Test',
+      html:    '<h2 style="color:#C96A4A">CraftStory email is working! ✓</h2><p>If you see this, SMTP is configured correctly.</p>',
+    });
+    res.json({ success: true, message: `Test email sent to ${to}` });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
