@@ -1,56 +1,70 @@
-const nodemailer = require('nodemailer');
+const https = require('https');
 
 /**
- * sendEmail({ email, subject, html })
+ * Uses Brevo REST API over HTTPS port 443.
+ * Render blocks ALL outbound SMTP (587, 465, 25).
+ * Port 443 HTTPS is never blocked anywhere.
  *
- * Uses Brevo SMTP relay — credentials never expire.
- * Brevo SMTP works on Render/Railway/all cloud hosts (port 587 is open).
- *
- * Add these to Render environment variables:
- *   BREVO_SMTP_USER = ad3b02001@smtp-brevo.com
- *   BREVO_SMTP_PASS = rX7jyMKxsPnhbLED
- *   EMAIL_FROM      = ggreeshma.ai@gmail.com
+ * Render env vars needed:
+ *   BREVO_API_KEY  — from Brevo dashboard (see below)
+ *   EMAIL_FROM     — ggreeshma.ai@gmail.com (must be verified in Brevo)
  */
-const sendEmail = async ({ email, subject, html }) => {
+const sendEmail = ({ email, subject, html }) => {
+  return new Promise((resolve, reject) => {
 
-  const user     = process.env.BREVO_SMTP_USER;
-  const pass     = process.env.BREVO_SMTP_PASS;
-  const fromEmail = process.env.EMAIL_FROM || process.env.EMAIL_USER;
+    const apiKey    = process.env.BREVO_API_KEY;
+    const fromEmail = process.env.EMAIL_FROM || process.env.EMAIL_USER;
 
-  if (!user || !pass) {
-    throw new Error(
-      'BREVO_SMTP_USER or BREVO_SMTP_PASS is not set in environment variables.'
-    );
-  }
+    if (!apiKey) {
+      return reject(new Error(
+        'BREVO_API_KEY not set. Get it from Brevo → top-right avatar → SMTP & API → API Keys tab → Generate.'
+      ));
+    }
 
-  if (!fromEmail) {
-    throw new Error('EMAIL_FROM is not set in environment variables.');
-  }
-
-  const transporter = nodemailer.createTransport({
-    host:   'smtp-relay.brevo.com',
-    port:   587,
-    secure: false, // STARTTLS
-    auth:   { user, pass },
-    connectionTimeout: 10000,
-    greetingTimeout:   10000,
-    socketTimeout:     15000,
-  });
-
-  try {
-    const info = await transporter.sendMail({
-      from:    `"CraftStory" <${fromEmail}>`,
-      to:      email,
+    const body = JSON.stringify({
+      sender:      { name: 'CraftStory', email: fromEmail },
+      to:          [{ email }],
       subject,
-      html,
+      htmlContent: html,
     });
-    console.log(`✓ Email sent to ${email} | MessageId: ${info.messageId}`);
-  } catch (error) {
-    console.error('✗ Email failed:', error.message);
-    throw error;
-  } finally {
-    transporter.close();
-  }
+
+    const req = https.request({
+      hostname: 'api.brevo.com',
+      path:     '/v3/smtp/email',
+      method:   'POST',
+      headers:  {
+        'Content-Type':   'application/json',
+        'Content-Length': Buffer.byteLength(body),
+        'api-key':        apiKey,
+      },
+    }, (res) => {
+      let data = '';
+      res.on('data', chunk => { data += chunk; });
+      res.on('end', () => {
+        if (res.statusCode >= 200 && res.statusCode < 300) {
+          console.log(`✓ Email sent to ${email}`);
+          resolve();
+        } else {
+          const msg = `Brevo error ${res.statusCode}: ${data}`;
+          console.error('✗', msg);
+          reject(new Error(msg));
+        }
+      });
+    });
+
+    req.setTimeout(15000, () => {
+      req.destroy();
+      reject(new Error('Brevo API request timed out'));
+    });
+
+    req.on('error', err => {
+      console.error('✗ Email request error:', err.message);
+      reject(err);
+    });
+
+    req.write(body);
+    req.end();
+  });
 };
 
 module.exports = sendEmail;
